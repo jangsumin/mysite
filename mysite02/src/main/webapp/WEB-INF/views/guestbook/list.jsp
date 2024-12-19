@@ -18,7 +18,7 @@ List<GuestbookVo> list = (List<GuestbookVo>) request.getAttribute("list");
 		<div id="content">
 			<div id="guestbook">
 				<form action="/mysite02/guestbook" method="post">
-					<input type="hidden" name="a" value="insert">
+					<input type="hidden" name="a" value="add">
 					<table>
 						<tr>
 							<td>이름</td><td><input type="text" name="name"></td>

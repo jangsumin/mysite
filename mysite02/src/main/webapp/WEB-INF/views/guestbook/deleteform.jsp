@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%
 	String id = request.getParameter("id");
-	System.out.println(id);
 %>
 <!DOCTYPE html>
 <html>
