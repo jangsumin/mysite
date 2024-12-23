@@ -44,7 +44,7 @@ public class GuestbookDao {
 	// find all guestbook
 	public List<GuestbookVo> findAll() {
 		List<GuestbookVo> result = new ArrayList<>();
-		String sql = "select id, name, contents, date_format(reg_date, '%Y-%m-%d %h:%i:%s') from guestbook order by reg_date desc";
+		String sql = "select id, name, contents, date_format(reg_date, '%Y-%m-%d %H:%i:%s') from guestbook order by reg_date desc";
 
 		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery();) {
 			while (rs.next()) {

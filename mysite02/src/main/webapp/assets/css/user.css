@@ -1,4 +1,4 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
 @import "mysite.css";
 
 #user		{ margin:20px auto;	width:540px; }
@@ -10,12 +10,12 @@
 	margin:50px auto;
 }
 
-label.block-label					{ display:block }
-label.block-label, fieldset			{ margin:5px 0 3px 0 }
-label.block-label, fieldset legend	{ margin-bottom:3px }
+label.block-label					{ display:block; }
+label.block-label, fieldset			{ margin:5px 0 3px 0; }
+label.block-label, fieldset legend	{ margin-bottom:3px; }
 
-fieldset				{ border:none }
-input[type="submit"]	{ display:block; width:80px; margin:20px auto }
+fieldset				{ border:none; }
+input[type="submit"]	{ display:block; width:80px; margin:20px auto; }
 
 #login-form	{
 	width:180px;
@@ -25,6 +25,6 @@ input[type="submit"]	{ display:block; width:80px; margin:20px auto }
 	margin:50px auto;
 }
 
-#user p		{ text-align:center; padding:10px}
+#user p		{ text-align:center; padding:10px;}
 
-#user p.jr-success	{ height:200px }
+#user p.jr-success	{ height:200px; }

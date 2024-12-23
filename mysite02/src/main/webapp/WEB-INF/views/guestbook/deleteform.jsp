@@ -3,15 +3,12 @@
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-	String id = request.getParameter("id");
-%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%=request.getContextPath()%>/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/guestbook.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
@@ -20,12 +17,12 @@
 			<div id="guestbook" class="delete-form">
 				<form method="post" action="/mysite02/guestbook">
 					<input type="hidden" name="a" value="delete">
-					<input type='hidden' name="id" value="<%=id %>">
+					<input type='hidden' name="id" value="${param.id}">
 					<label>비밀번호</label>
 					<input type="password" name="password">
 					<input type="submit" value="확인">
 				</form>
-				<a href="<%=request.getContextPath()%>/guestbook">방명록 리스트</a>
+				<a href="${pageContext.request.contextPath}/guestbook">방명록 리스트</a>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
