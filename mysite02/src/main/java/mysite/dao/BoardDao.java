@@ -64,7 +64,7 @@ public class BoardDao {
 	// find all posts
 	public List<BoardVo> findAll() {
 		List<BoardVo> result = new ArrayList<>();
-		String sql = "select b.id, b.title, b.hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s'), b.user_id, u.name from board b join user u on b.user_id = u.id order by b.g_no desc, o_no asc";
+		String sql = "select b.id, b.title, b.hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s'), b.depth, b.user_id, u.name from board b join user u on b.user_id = u.id order by b.g_no desc, o_no asc";
 
 		try (Connection conn = getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -74,14 +74,16 @@ public class BoardDao {
 				String title = rs.getString(2);
 				long hit = rs.getLong(3);
 				String regDate = rs.getString(4);
-				long userId = rs.getLong(5);
-				String name = rs.getString(6);
+				long depth = rs.getLong(5);
+				long userId = rs.getLong(6);
+				String name = rs.getString(7);
 
 				BoardVo vo = new BoardVo();
 				vo.setId(id);
 				vo.setTitle(title);
 				vo.setHit(hit);
 				vo.setRegDate(regDate);
+				vo.setDepth(depth);
 				vo.setUserId(userId);
 				vo.setUserName(name);
 
@@ -92,6 +94,65 @@ public class BoardDao {
 			System.out.println("error:" + e);
 		}
 
+		return result;
+	}
+	
+	// find all posts adapting pagination
+	public List<BoardVo> findAllPerPage(int postCntPerPage, int currentIndex) {
+		List<BoardVo> result = new ArrayList<>();
+		String sql = "select b.id, b.title, b.hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s'), b.depth, b.user_id, u.name from board b join user u on b.user_id = u.id order by b.g_no desc, o_no asc limit ? offset ?";
+
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, postCntPerPage);
+			pstmt.setInt(2, postCntPerPage * currentIndex - postCntPerPage);
+			
+			ResultSet rs = pstmt.executeQuery();
+		
+			while (rs.next()) {
+				long id = rs.getLong(1);
+				String title = rs.getString(2);
+				long hit = rs.getLong(3);
+				String regDate = rs.getString(4);
+				long depth = rs.getLong(5);
+				long userId = rs.getLong(6);
+				String name = rs.getString(7);
+
+				BoardVo vo = new BoardVo();
+				vo.setId(id);
+				vo.setTitle(title);
+				vo.setHit(hit);
+				vo.setRegDate(regDate);
+				vo.setDepth(depth);
+				vo.setUserId(userId);
+				vo.setUserName(name);
+
+				result.add(vo);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		return result;
+	}
+	
+	// count all posts
+	public int countAllPosts() {
+		int result = 0;
+		String sql = "select count(*) from board";
+		
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery();) {
+			if (rs.next()) {
+				result = rs.getInt(1);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		
 		return result;
 	}
 
@@ -174,6 +235,7 @@ public class BoardDao {
 		}
 	}
 	
+	// insert reply
 	public void insertReply(BoardVo vo) {
 		String sql = "insert into board values(null, ?, ?, 0, now(), ?, ?, ?, ?)";
 		
@@ -199,6 +261,59 @@ public class BoardDao {
 		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setLong(1, groupNo);
 			pstmt.setLong(2, orderNo);
+
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("드라이버 로딩 실패:" + e);
+		}
+	}
+	
+	// search by title
+	public List<BoardVo> searchAllByTitle(String str) {
+		List<BoardVo> result = new ArrayList<>();
+		String sql = "select b.id, b.title, b.hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s'), b.depth, b.user_id, u.name from board b join user u on b.user_id = u.id where b.title like ? order by b.g_no desc, o_no asc";
+
+		try (Connection conn = getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setString(1, "%" + str + "%");
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				long id = rs.getLong(1);
+				String title = rs.getString(2);
+				long hit = rs.getLong(3);
+				String regDate = rs.getString(4);
+				long depth = rs.getLong(5);
+				long userId = rs.getLong(6);
+				String name = rs.getString(7);
+
+				BoardVo vo = new BoardVo();
+				vo.setId(id);
+				vo.setTitle(title);
+				vo.setHit(hit);
+				vo.setRegDate(regDate);
+				vo.setDepth(depth);
+				vo.setUserId(userId);
+				vo.setUserName(name);
+
+				result.add(vo);
+			}
+			
+			rs.close();
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		return result;
+	}
+	
+	// update view count
+	public void updatePostViewCount(long id) {
+		String sql = "update board set hit = hit + 1 where id = ?";
+		
+		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+			pstmt.setLong(1, id);
 
 			pstmt.executeUpdate();
 		} catch (SQLException e) {

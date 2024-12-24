@@ -16,7 +16,7 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath}/board?a=search" method="post">
 					<input type="text" id="kwd" name="kwd" value=""> <input
 						type="submit" value="찾기">
 				</form>
@@ -32,8 +32,13 @@
 					<c:set var="count" value="${fn:length(list)}" />
 					<c:forEach items="${list}" var="vo" varStatus="status">
 						<tr>
-							<td>${count-status.index}</td>
-							<td><a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">${vo.title}</a></td>
+							<td>${map.get("currentPageIndex") * 5 - 5 + count - status.index}</td>
+							<td>
+								<a href="${pageContext.request.contextPath}/board?a=view&id=${vo.id}">
+									<c:forEach begin="1" end="${vo.depth}">RE:</c:forEach>
+									${vo.title}
+								</a>
+							</td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit}</td>
 							<td>${vo.regDate}</td>
@@ -45,6 +50,32 @@
 						</tr>
 					</c:forEach>
 				</table>
+				
+				<!-- pager 추가 -->
+				<div class="pager">
+					<ul>
+						<c:if test='${map.get("currentPageIndex") != 1}'>
+							<li><a href='${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${map.get("currentPageIndex") - 1}'>◀</a></li>							
+						</c:if>
+		
+						<c:forEach var="index" begin='${map.get("minPageIndex")}' end='${map.get("maxPageIndex")}'>
+							<c:choose>
+								<c:when test='${map.get("currentPageIndex") == index}'>
+									<li class="selected">${index}</li>								
+								</c:when>
+								<c:otherwise>
+									<li><a href="${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${index}">${index}</a></li>								
+								</c:otherwise>
+							</c:choose>	
+						</c:forEach>
+						
+						<c:if test='${map.get("lastPageIndex") != map.get("currentPageIndex")}'>
+							<li><a href='${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${map.get("currentPageIndex") + 1}'>▶</a></li>							
+						</c:if>
+					</ul>
+				</div>					
+				<!-- pager 추가 -->
+				
 				<c:if test="${not empty authUser}">
 					<div class="bottom">
 						<a href="${pageContext.request.contextPath}/board?a=writeform" id="new-book">글쓰기</a>

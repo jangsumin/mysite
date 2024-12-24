@@ -5,8 +5,10 @@ import mysite.controller.action.board.DeleteAction;
 import mysite.controller.action.board.ListAction;
 import mysite.controller.action.board.ModifyAction;
 import mysite.controller.action.board.ModifyFormAction;
+import mysite.controller.action.board.PageMoveAction;
 import mysite.controller.action.board.ReplyAction;
 import mysite.controller.action.board.ReplyFormAction;
+import mysite.controller.action.board.SearchAction;
 import mysite.controller.action.board.ViewAction;
 import mysite.controller.action.board.WriteAction;
 import mysite.controller.action.board.WriteFormAction;
@@ -25,7 +27,9 @@ public class BoardServlet extends ActionServlet {
 		"modifyform", new ModifyFormAction(),
 		"modify", new ModifyAction(),
 		"replyform", new ReplyFormAction(),
-		"reply", new ReplyAction()
+		"reply", new ReplyAction(),
+		"search", new SearchAction(),
+		"pagemove", new PageMoveAction()
 	);
 
 	@Override
