@@ -28,7 +28,12 @@ public class PageMoveAction implements Action {
 		Map<String, Integer> map = new HashMap<>();
 		
 		// 가장 작은 페이지 인덱스
-		int minPageIndex = ((int) (currentIndex / POSTS_PER_COUNT)) * POSTS_PER_COUNT + 1;
+		int minPageIndex = 0;
+		if (currentIndex % POSTS_PER_COUNT == 0) {
+			minPageIndex = currentIndex;
+		} else {
+			minPageIndex = ((int) (currentIndex / POSTS_PER_COUNT)) * POSTS_PER_COUNT + 1;
+		}
 		map.put("minPageIndex", minPageIndex);
 		
 		// 현재 페이지 인덱스
