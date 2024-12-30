@@ -7,6 +7,7 @@ public class UserVo {
 	private String password;
 	private String gender;
 	private String joinDate;
+	private String role;
 	
 	public long getId() {
 		return id;
@@ -54,5 +55,13 @@ public class UserVo {
 	
 	public void setJoinDate(String joinDate) {
 		this.joinDate = joinDate;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+	
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

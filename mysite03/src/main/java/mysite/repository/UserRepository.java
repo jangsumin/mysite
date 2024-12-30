@@ -29,7 +29,7 @@ public class UserRepository {
 	
 	// insert user
 	public void insert(UserVo vo) {
-		String sql = "insert into user values(null, ?, ?, ?, ?, now())";
+		String sql = "insert into user values(null, ?, ?, ?, ?, now(), 'USER')";
 
 		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);){
 			pstmt.setString(1, vo.getName());
@@ -46,7 +46,7 @@ public class UserRepository {
 	// find user
 	public UserVo findByEmailAndPassword(String email, String password) {
 		UserVo userVo = null;
-		String sql = "select id, name from user where email = ? and password = ?";
+		String sql = "select id, name, role from user where email = ? and password = ?";
 		
 		try (Connection conn = getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 			pstmt.setString(1, email);
@@ -56,10 +56,12 @@ public class UserRepository {
 			if (rs.next()) {
 				Long id = rs.getLong(1);
 				String name = rs.getString(2);
+				String role = rs.getString(3);
 				
 				userVo = new UserVo();
 				userVo.setId(id);
 				userVo.setName(name);
+				userVo.setRole(role);
 			}
 			rs.close();
 		} catch (SQLException e) {

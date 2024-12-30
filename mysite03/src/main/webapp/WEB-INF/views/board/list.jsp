@@ -17,7 +17,7 @@
 		<div id="content">
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath}/board/search" method="post">
-					<input type="text" id="kwd" name="kwd" value=""> <input
+					<input type="text" id="kwd" name="kwd" value="${keyword}"> <input
 						type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -32,7 +32,7 @@
 					<c:set var="count" value="${fn:length(list)}" />
 					<c:forEach items='${map.get("list")}' var="vo" varStatus="status">
 						<tr>
-							<td>${map.get("currentPage") * 5 - status.index}</td>
+							<td>${map.get("currentPage") * 5 + status.index - 4}</td>
 							<td>
 								<a href="${pageContext.request.contextPath}/board/view/${vo.id}">
 									<c:forEach begin="1" end="${vo.depth}">RE:</c:forEach>
@@ -54,24 +54,49 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
-						<c:if test='${map.get("currentPage") != 1}'>
-							<li><a href='${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${map.get("currentPage") - 1}'>◀</a></li>							
-						</c:if>
-		
-						<c:forEach var="index" begin='${map.get("beginPage")}' end='${map.get("maxPage")}'>
-							<c:choose>
-								<c:when test='${map.get("currentPage") == index}'>
-									<li class="selected">${index}</li>								
-								</c:when>
-								<c:otherwise>
-									<li><a href="${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${index}">${index}</a></li>								
-								</c:otherwise>
-							</c:choose>	
-						</c:forEach>
-						
-						<c:if test='${map.get("endPage") != map.get("currentPage")}'>
-							<li><a href='${pageContext.request.contextPath}/board?a=pagemove&currentIndex=${map.get("currentPage") + 1}'>▶</a></li>							
-						</c:if>
+						<c:set var="hasKeyword" value='${keyword == null || keyword == ""}' />
+						<c:choose>
+							<c:when test='${hasKeyword}'>
+								<c:if test='${map.get("currentPage") != 1}'>
+									<li><a href='${pageContext.request.contextPath}/board/page/${map.get("currentPage") - 1}'>◀</a></li>							
+								</c:if>
+				
+								<c:forEach var="index" begin='${map.get("beginPage")}' end='${map.get("maxPage")}'>
+									<c:choose>
+										<c:when test='${map.get("currentPage") == index}'>
+											<li class="selected">${index}</li>								
+										</c:when>
+										<c:otherwise>
+											<li><a href="${pageContext.request.contextPath}/board/page/${index}">${index}</a></li>								
+										</c:otherwise>
+									</c:choose>	
+								</c:forEach>
+								
+								<c:if test='${map.get("endPage") != map.get("currentPage")}'>
+									<li><a href='${pageContext.request.contextPath}/board/search/page/${map.get("currentPage") + 1}'>▶</a></li>							
+								</c:if>
+							</c:when>
+							<c:otherwise>
+								<c:if test='${map.get("currentPage") != 1}'>
+									<li><a href='${pageContext.request.contextPath}/board/search/${keyword}/page/${map.get("currentPage") - 1}'>◀</a></li>							
+								</c:if>
+				
+								<c:forEach var="index" begin='${map.get("beginPage")}' end='${map.get("maxPage")}'>
+									<c:choose>
+										<c:when test='${map.get("currentPage") == index}'>
+											<li class="selected">${index}</li>								
+										</c:when>
+										<c:otherwise>
+											<li><a href="${pageContext.request.contextPath}/board/search/${keyword}/page/${index}">${index}</a></li>								
+										</c:otherwise>
+									</c:choose>	
+								</c:forEach>
+								
+								<c:if test='${map.get("endPage") != map.get("currentPage")}'>
+									<li><a href='${pageContext.request.contextPath}/board/search/${keyword}/page/${map.get("currentPage") + 1}'>▶</a></li>							
+								</c:if>
+							</c:otherwise>
+						</c:choose>
 					</ul>
 				</div>					
 				<!-- pager 추가 -->

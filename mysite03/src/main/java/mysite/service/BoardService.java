@@ -21,13 +21,25 @@ public class BoardService {
 	public void addContents(BoardVo vo) {
 		boardRepository.insert(vo);
 	}
-
+	
+	public Map<String, Long> getParentContentInfo(long id) {
+		return boardRepository.getParentInfo(id);
+	}
+	
+	public void addReply(BoardVo vo) {
+		boardRepository.insertReply(vo);
+	}
+ 
 	public BoardVo getContents(long id) {
 		return boardRepository.findPostById(id);
 	}
 
 	public BoardVo getContents(long id, long userId) {
 		return boardRepository.findPostById(id, userId);
+	}
+	
+	public void updateViewCount(long id) {
+		boardRepository.updatePostViewCount(id);
 	}
 
 	public void updateContents(BoardVo vo) {
@@ -41,7 +53,13 @@ public class BoardService {
 	public Map<String, Object> getContentsList(int currentPage, String keyword) {
 		Map<String, Object> map = new HashMap<>();
 
-		List<BoardVo> list = boardRepository.findAllPerPage(CONTENTS_PER_PAGE, currentPage);
+		List<BoardVo> list;
+		
+		if ("".equals(keyword)) {
+			list = boardRepository.findAllPerPage(CONTENTS_PER_PAGE, currentPage);
+		} else {
+			list = boardRepository.findAllPerPage(CONTENTS_PER_PAGE, currentPage, keyword);
+		}
 		
 		map.put("list", list);
 
@@ -56,7 +74,14 @@ public class BoardService {
 		map.put("currentPage", currentPage);
 
 		int endPage = 0;
-		int allContentsCount = boardRepository.countAllPosts();
+		int allContentsCount;
+		
+		if ("".equals(keyword)) {
+			allContentsCount = boardRepository.countAllPosts();
+		} else {
+			allContentsCount = boardRepository.countAllPosts(keyword);
+		}
+	
 		if (allContentsCount % CONTENTS_PER_PAGE == 0) {
 			endPage = allContentsCount / CONTENTS_PER_PAGE;
 		} else {

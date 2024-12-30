@@ -15,11 +15,10 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board">
-					<input type="hidden" name="a" value="reply">
-					<input type="hidden" name="groupNo" value="${info.groupNo}" >
-					<input type="hidden" name="orderNo" value="${info.orderNo}" >
-					<input type="hidden" name="depth" value="${info.depth}" >
+				<form class="board-form" method="post" action="${pageContext.request.contextPath}/board/reply">
+					<input type="hidden" name="groupNo" value='${groupNo}' >
+					<input type="hidden" name="orderNo" value='${orderNo}' >
+					<input type="hidden" name="depth" value='${depth}' >
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">답글 쓰기</th>
