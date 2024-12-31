@@ -21,22 +21,26 @@ public class UserController {
 		this.userService = userService;
 	}
 	
+	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "user/join";
 	}
 	
+	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(UserVo userVo) {
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
 	
+	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
 		return "user/joinsuccess";
 	}
 	
+	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
 		return "user/login";

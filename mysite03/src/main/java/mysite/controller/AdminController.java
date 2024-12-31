@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import mysite.security.Auth;
 
+// 클래스 내 모든 메서드는 admin만 접근할 수 있는 메서드다.
 @Auth(role="ADMIN")
 @Controller
 @RequestMapping("/admin")
