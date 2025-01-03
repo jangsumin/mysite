@@ -30,6 +30,11 @@
 			<mvc:exclude-mapping path="/assets/**" />
 			<bean class="mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="mysite.security.SiteInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 	
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
@@ -42,6 +47,9 @@
 	
 	<!-- DefaultServlet Handler -->
 	<mvc:default-servlet-handler />
+	
+	<!--  mvc url-resource mapping -->
+	<mvc:resources mapping="/assets/upload-images/**" location="file:/Users/jangsumin/mysite-uploads" />
 	
 	<!-- View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
