@@ -21,7 +21,7 @@ public class UserRepository {
 	
 	// insert user
 	public int insert(UserVo vo) {
-		return sqlSession.insert("user.insert", vo);
+		return sqlSession.insert("user.insert", vo);		
 	}
 
 	// find user

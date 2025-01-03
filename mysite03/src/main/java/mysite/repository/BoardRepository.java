@@ -1,5 +1,6 @@
 package mysite.repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,18 +24,18 @@ public class BoardRepository {
 	}
 
 	// get max group no
-	public int getMaxGroupNo() {
+	public long getMaxGroupNo() {
 		return sqlSession.selectOne("board.getMaxGroupNo");
 	}
 
 	// find all posts adapting pagination
 	public List<BoardVo> findAllPerPage(int postCntPerPage, int currentIndex) {
-		return sqlSession.selectList("board.findAllPerPage", Map.of("postCntPerPage", postCntPerPage, "currentIndex", currentIndex));
+		return sqlSession.selectList("board.findAllPerPage", Map.of("postCntPerPage", postCntPerPage, "currentIndex", currentIndex * postCntPerPage - postCntPerPage));
 	}
 	
 	// find all posts adapting pagination with keyword
 	public List<BoardVo> findAllPerPage(int postCntPerPage, int currentIndex, String keyword) {
-		return sqlSession.selectList("board.findAllPerPageWithKeyword", Map.of("postCntPerPage", postCntPerPage, "currentIndex", currentIndex, "keyword", keyword));
+		return sqlSession.selectList("board.findAllPerPageWithKeyword", Map.of("postCntPerPage", postCntPerPage, "currentIndex", currentIndex * postCntPerPage - postCntPerPage, "keyword", keyword));
 	}
 
 	// count all posts
@@ -68,49 +69,20 @@ public class BoardRepository {
 	}
 
 	// get groupNo, orderNo, depth of the parent post
-//	public Map<String, Long> getParentInfo(long id) {
-//		Map<String, Long> parentPost =  new HashMap<>();
-//		String sql = "select g_no, o_no, depth from board where id = ?";
-//
-//		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-//			pstmt.setLong(1, id);
-//
-//			ResultSet rs = pstmt.executeQuery();
-//			if (rs.next()) {
-//				long groupNo = rs.getLong(1);
-//				long orderNo = rs.getLong(2);
-//				long depth = rs.getLong(3);
-//				
-//				parentPost.put("groupNo", groupNo);
-//				parentPost.put("orderNo", orderNo);
-//				parentPost.put("depth", depth);
-//			}
-//		} catch (SQLException e) {
-//			System.out.println("error:" + e);
-//		}
-//		
-//		return parentPost;
-//	}
+	public Map<String, Long> getParentInfo(long id) {
+		Map<String, Long> parentPost =  new HashMap<>();
+		BoardVo vo = sqlSession.selectOne("board.getParentInfo", id);
+		parentPost.put("groupNo", vo.getGroupNo());
+		parentPost.put("orderNo", vo.getOrderNo());
+		parentPost.put("depth", vo.getDepth());
+		return parentPost;
+	}
 
 	// insert reply
-//	public void insertReply(BoardVo vo) {
-//		String sql = "insert into board values(null, ?, ?, 0, now(), ?, ?, ?, ?)";
-//
-//		updateOrderNo(vo.getGroupNo(), vo.getOrderNo());
-//
-//		try (Connection conn = dataSource.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-//			pstmt.setString(1, vo.getTitle());
-//			pstmt.setString(2, vo.getContents());
-//			pstmt.setLong(3, vo.getGroupNo());
-//			pstmt.setLong(4, vo.getOrderNo());
-//			pstmt.setLong(5, vo.getDepth());
-//			pstmt.setLong(6, vo.getUserId());
-//
-//			pstmt.executeUpdate();
-//		} catch (SQLException e) {
-//			System.out.println("드라이버 로딩 실패:" + e);
-//		}
-//	}
+	public int insertReply(BoardVo vo) {
+		updateOrderNo(vo.getGroupNo(), vo.getOrderNo());
+		return sqlSession.insert("board.insertReply", vo);
+	}
 
 	// update order no for create reply
 	public int updateOrderNo(long groupNo, long orderNo) {
