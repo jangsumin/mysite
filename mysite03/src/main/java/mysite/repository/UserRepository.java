@@ -1,13 +1,10 @@
 package mysite.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StopWatch;
 
 import mysite.vo.UserVo;
 
@@ -26,7 +23,8 @@ public class UserRepository {
 
 	// find user
 	public UserVo findByEmailAndPassword(String email, String password) {
-		return sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
+		UserVo userVo = sqlSession.selectOne("user.findByEmailAndPassword", Map.of("email", email, "password", password));
+		return userVo;
 	}
 
 	// find user

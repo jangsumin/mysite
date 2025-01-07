@@ -1,10 +1,15 @@
 package mysite.controller;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.validation.Valid;
 import mysite.security.Auth;
 import mysite.security.AuthUser;
 import mysite.service.UserService;
@@ -23,13 +28,19 @@ public class UserController {
 	
 	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String join() {
+	public String join(@ModelAttribute UserVo userVo) {
 		return "user/join";
 	}
 	
 	// user, admin 상관없이 모두가 접할 수 있어야 함.
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(UserVo userVo) {
+	public String join(@ModelAttribute @Valid UserVo userVo, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			Map<String, Object> map = result.getModel();
+			model.addAllAttributes(map);
+			return "user/join";
+		}
+		
 		userService.join(userVo);
 		return "redirect:/user/joinsuccess";
 	}
