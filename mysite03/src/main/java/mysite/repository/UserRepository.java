@@ -32,8 +32,14 @@ public class UserRepository {
 		return sqlSession.selectOne("user.findById", id);
 	}
 
+	// find user for checking email validity
+	public UserVo findByEmail(String email) {
+		return sqlSession.selectOne("user.findByEmail", email);
+	}
+
 	// update
 	public int update(UserVo vo) {
 		return sqlSession.update("user.update", vo);
 	}
+
 }
