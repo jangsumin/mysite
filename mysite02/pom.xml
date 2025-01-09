@@ -33,7 +33,7 @@
 			<artifactId>jakarta.servlet.jsp.jstl</artifactId>
 			<version>3.0.1</version>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
@@ -46,7 +46,7 @@
 			<version>5.10.2</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- servlet-api -->
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
@@ -67,5 +67,16 @@
 
 	<build>
 		<finalName>mysite02</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<url>${tomcat.deploy.url}</url>
+					<server>tomcat-poscodx</server>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
