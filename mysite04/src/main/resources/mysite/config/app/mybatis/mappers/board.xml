@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+	<insert id="insert" parameterType="boardvo">
+		<![CDATA[insert into board values(null, #{title}, #{contents}, 0, now(), #{groupNo}, #{orderNo}, ${depth}, #{userId})]]>
+	</insert>
+	
+	<select id="getMaxGroupNo" resultType="long">
+		<![CDATA[select ifnull(max(g_no), 0) + 1 from board]]>
+	</select>
+	
+	<select id="findAllPerPage" parameterType="map" resultType="boardvo">
+		<![CDATA[select b.id as id, b.title as title, b.hit as hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s') as regDate, b.depth as depth, b.user_id as userId, u.name as userName from board b join user u on b.user_id = u.id order by b.g_no desc, b.o_no asc limit #{postCntPerPage} offset #{currentIndex}]]>
+	</select>
+	
+	<select id="findAllPerPageWithKeyword" parameterType="map" resultType="boardvo">
+		<![CDATA[select b.id as id, b.title as title, b.hit as hit, date_format(b.reg_date, '%Y-%m-%d %H:%i:%s') as regDate, b.depth as depth, b.user_id as userId, u.name as userName from board b join user u on b.user_id = u.id where b.title like '%${keyword}%' order by b.g_no desc, b.o_no asc limit #{postCntPerPage} offset #{currentIndex}]]>
+	</select>
+	
+	<select id="countAllPosts" resultType="int">
+		<![CDATA[select count(*) from board]]>
+	</select>
+	
+	<select id="countAllPostsWithKeyword" parameterType="string" resultType="int">
+		<![CDATA[select count(*) from board where title like '%${keyword}%']]>
+	</select>
+	
+	<select id="findPostById" parameterType="long" resultType="boardvo">
+		<![CDATA[select id, title, contents, user_id as userId from board where id = #{id}]]>
+	</select>
+	
+	<select id="findPostByIdAndUserId" parameterType="map" resultType="boardvo">
+		<![CDATA[select id, title, contents, user_id as userId from board where id = #{id} and user_id = #{userId}]]>
+	</select>
+	
+	<delete id="deletePostById" parameterType="map">
+		<![CDATA[delete from board where id = #{id} and user_id = #{userId}]]>
+	</delete>
+	
+	<update id="modifyPost" parameterType="boardvo">
+		<![CDATA[update board set title = #{title}, contents = #{contents} where id = #{id}]]>		
+	</update>
+	
+	<select id="getParentInfo" parameterType="long" resultType="boardvo">
+		<![CDATA[select g_no as groupNo, o_no as orderNo, depth from board where id = #{id}]]>
+	</select>
+	
+	<insert id="insertReply" parameterType="boardvo">
+		<![CDATA[insert into board values(null, #{title}, #{contents}, 0, now(), #{groupNo}, #{orderNo}, ${depth}, #{userId})]]>		
+	</insert>
+	
+	<update id="updateOrderNo" parameterType="map">
+		<![CDATA[update board set o_no = o_no + 1 where g_no = #{groupNo} and o_no >= #{orderNo}]]>		
+	</update>
+	
+	<update id="updatePostViewCount" parameterType="long">
+		<![CDATA[update board set hit = hit + 1 where id = #{id}]]>		
+	</update>
+	
+</mapper>
