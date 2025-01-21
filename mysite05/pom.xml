@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.poscodx</groupId>
-    <artifactId>mysite04</artifactId>
+    <artifactId>mysite05</artifactId>
     <packaging>war</packaging>
     <version>0.0.1-SNAPSHOT</version>
 	
@@ -13,6 +13,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<org.springframework-version>6.2.1</org.springframework-version>
+		<org.springsecurity-version>6.4.2</org.springsecurity-version>
 		<jcloverslf4j.version>1.7.36</jcloverslf4j.version>
 		<logback.version>1.2.11</logback.version>
 	</properties>
@@ -59,6 +60,27 @@
 			<artifactId>spring-aspects</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+		
+		<!-- spring security web -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${org.springsecurity-version}</version>
+        </dependency>
+
+        <!-- spring security config -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${org.springsecurity-version}</version>
+        </dependency>
+
+        <!-- spring security config -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${org.springsecurity-version}</version>
+        </dependency>
 
 		<!-- MyBatis -->
 		<dependency>
@@ -142,6 +164,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>mysite04</finalName>
+		<finalName>mysite05</finalName>
 	</build>
 </project>
